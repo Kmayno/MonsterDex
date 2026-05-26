@@ -1,24 +1,40 @@
 package com.dex.monsterdex.pojo;
 
 import jakarta.persistence.*;
+import java.util.Set;
 
-@Table
+@Entity
+@Table(name = "category")
 public class Category {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_category;
-    @Column
+    private Long id;
+
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
+
+    @Lob
+    @Column(name = "description")
+    private String description;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Monster> monsters;
 
     public Category() {
     }
 
-    public int getId_category() {
-        return id_category;
+    public Category(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
-    public void setId_category(int id_category) {
-        this.id_category = id_category;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -29,8 +45,19 @@ public class Category {
         this.name = name;
     }
 
-    public Category(int id_category, String name) {
-        this.id_category = id_category;
-        this.name = name;
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<Monster> getMonsters() {
+        return monsters;
+    }
+
+    public void setMonsters(Set<Monster> monsters) {
+        this.monsters = monsters;
     }
 }

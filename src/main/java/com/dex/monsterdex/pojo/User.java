@@ -1,30 +1,37 @@
 package com.dex.monsterdex.pojo;
 
 import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true, length = 50)
     private String username;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bestmonster")
-    private Monster bestMonster;
+    @Column(name = "email", nullable = false, unique = true, length = 100)
+    private String email;
+
+    @Column(name = "password", nullable = false, length = 255)
+    private String passwordHash;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Rating> ratings;
+
 
     public User() {
     }
 
-    public User(String username, Monster bestMonster) {
+    public User(String username, String email, String passwordHash) {
         this.username = username;
-        this.bestMonster = bestMonster;
+        this.email = email;
+        this.passwordHash = passwordHash;
     }
-
     public Long getId() {
         return id;
     }
@@ -41,20 +48,27 @@ public class User {
         this.username = username;
     }
 
-    public Monster getBestMonster() {
-        return bestMonster;
+    public String getEmail() {
+        return email;
     }
 
-    public void setBestMonster(Monster bestMonster) {
-        this.bestMonster = bestMonster;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", bestMonster=" + (bestMonster != null ? bestMonster.getName() : "null") +
-                '}';
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
     }
 }
